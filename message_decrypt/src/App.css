@@ -17,6 +17,10 @@
   --crt-text__color: greenyellow;
 }
 
+*, *::before, *::after{
+  box-sizing: border-box;
+}
+
 /* Reset CSS */
 body{
   background-color: #222;
@@ -29,8 +33,8 @@ body{
   grid-template-rows: 1fr;
   place-items: center;
   padding: 40px 40px 110px 40px;
-  width: calc(100vw - 80px);
-  height: calc(100vh - 150px);
+  width: 100vw;
+  height: 100vh;
   overflow: hidden;
   background-color: #d3c9ae;
 }
@@ -56,7 +60,7 @@ body{
               radial-gradient(var(--crt-light__color-first), var(--crt-light__color-second));
   color: var(--crt-text__color);
   font-weight: bold;
-  padding: 0.5rem;
+  padding: 5px;
   position: relative;
   overflow: hidden;
   z-index: 1;
@@ -102,13 +106,13 @@ body{
   margin: 5px 0;
   font-size: 24px;
   color: transparent;
-  mix-blend-mode: color-dodge;
-  background: greenyellow;
+  background: #0f0;
   background-clip: text;
+  transition: all 0.1s linear;
 }
 
 .crt-text::selection, .crt-input::selection{
-  background-color: greenyellow;
+  background-color: #0f0;
   color: green;
   background-clip: none;
 }
@@ -119,8 +123,7 @@ body{
   padding: 0;
   font-size: 24px;
   color: transparent;
-  mix-blend-mode: color-dodge;
-  background: greenyellow;
+  background: #0f0;
   background-clip: text;
   border: none;
   display: flex;
@@ -128,13 +131,6 @@ body{
 
 .crt-input:focus{
   outline: none;
-}
-
-.crt-input::after{
-  content: "_";
-  position: absolute;
-  top: 20px;
-  left: 20px;
 }
 
 /* CRT plate buttons on frame */
@@ -213,8 +209,6 @@ body{
   .crt-frame{
     padding: 0;
     background: none;
-    width: 100vw;
-    height: 100vh;
   }
   .crt-frame::after{
     display: none;
@@ -222,7 +216,7 @@ body{
   .crt-screen{
     border-radius: 0;
   }
-  .crt-text{
+  .crt-text, .crt-input{
     margin: 5px;
   }
 }
