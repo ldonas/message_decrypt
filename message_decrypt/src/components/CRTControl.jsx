@@ -39,7 +39,7 @@ export function CRTControl ({children, min, max, defValue=0, isCyclic, setValue}
         <section className="crt-control">
             <div className="crt-radial-button__3d">
                 <img 
-                    src="radial-control.svg" 
+                    src="icons/radial-control.svg" 
                     alt="Botón radial" 
                     style={{transform: `rotate(${angle}deg)`}}
                     onMouseDown={BeginRotation} 

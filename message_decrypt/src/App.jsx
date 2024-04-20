@@ -123,10 +123,10 @@ function App() {
           }
           <div className="RRSS" style={{display: "flex", justifyContent: "flex-end", alignItems: "center"}}>
             <a href="https://twitter.com/lorenzo_donas">
-              <img src="post-it-X.svg" width={50} height={50} alt="Imagen X" className=""/>
+              <img src="icons/post-it-X.svg" width={50} height={50} alt="Imagen X" className=""/>
             </a>
             <a href="https://github.com/ldonas">
-              <img src="post-it-github.svg" width={50} height={50} alt="Imagen Github" className=""/>
+              <img src="icons/post-it-github.svg" width={50} height={50} alt="Imagen Github" className=""/>
             </a>
           </div>
         </section>
