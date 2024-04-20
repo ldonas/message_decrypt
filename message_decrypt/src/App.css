@@ -1,20 +1,23 @@
 /* Theme Name: CRT Screen */
-
-/* Font Credit: Jens Kutilek - https://github.com/jenskutilek/homecomputer-fonts */
-@import url('https://fonts.googleapis.com/css2?family=Workbench&display=swap');
-
 /* Font Credit: Matt McInerney - https://fonts.google.com/specimen/Allerta+Stencil/about?preview.text=HUE&query=stencil */
-@import url('https://fonts.googleapis.com/css2?family=Allerta+Stencil&display=swap');
+/*@import url('https://fonts.googleapis.com/css2?family=Allerta+Stencil&display=swap');*/
 
 :root{
   --crt__width: 500px;
   --crt__height: 500px;
-  --crt-light__color-first: #002000;
-  --crt-light__color-second: #000A00; 
+  --crt-light__color-first: #003000;
+  --crt-light__color-second: #001500; 
   --crt-linear__color: #00200033;
   --crt-linear__height: 5px;
-  --crt-scan__color: #11221166;
-  --crt-text__color: greenyellow;
+  --crt-scan__color: #00330044;
+  --crt-font-family: "VT323", monospace;
+  --crt-font-size: 30px;
+  --crt-font-size-small: 25px;
+  --crt-letter-spacing: 1px;
+  --crt-line-height: 1;
+  --crt-text__color: #00EE00;
+  --crt-text-selected__color: #005000;
+  --crt-terminal-frame__color: #beb499;
 }
 
 *, *::before, *::after{
@@ -36,7 +39,7 @@ body{
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  background-color: #d3c9ae;
+  background-color: var(--crt-terminal-frame__color);
 }
 
 .crt-frame::after{
@@ -77,7 +80,6 @@ body{
   top: -100%;
   animation: 3s linear 1s infinite;
   animation-name: scan-line;
-  mix-blend-mode: saturation;
   z-index: -1;
   left: 0;
 }
@@ -96,37 +98,35 @@ body{
   margin-top: 45px;
 }
 .crt-screen-container::-webkit-scrollbar-thumb{
-  background-color: #0F0;
+  background-color: var(--crt-text__color);
   border-radius: 5px;
 }
 
 /* CRT Text */
 .crt-text{
-  font-family: "Workbench", sans-serif;
+  font-family: var(--crt-font-family);
+  font-size: var(--crt-font-size);
+  letter-spacing: var(--crt-letter-spacing);
+  line-height: var(--crt-line-height);
   margin: 5px 0;
-  font-size: 24px;
-  color: transparent;
-  background: #0f0;
-  background-clip: text;
-  transition: all 0.1s linear;
 }
 
 .crt-text::selection, .crt-input::selection{
-  background-color: #0f0;
-  color: green;
-  background-clip: none;
+  background-color: var(--crt-text__color);
+  color: var(--crt-text-selected__color);
 }
 
 .crt-input{
-  font-family: "Workbench", sans-serif;
+  font-family: var(--crt-font-family);
+  font-size: var(--crt-font-size);
+  letter-spacing: var(--crt-letter-spacing);
+  line-height: var(--crt-line-height);
+  color: var(--crt-text__color);
+  background-color: transparent;
+  caret-color: transparent;
   margin: 5px 0;
   padding: 0;
-  font-size: 24px;
-  color: transparent;
-  background: #0f0;
-  background-clip: text;
   border: none;
-  display: flex;
 }
 
 .crt-input:focus{
@@ -146,6 +146,8 @@ body{
   left: 15px;
   width: calc(100% - 30px);
   height: 70px;
+  border: 1px solid grey;
+  box-shadow: 1px 1px 2px grey;
 }
 
 /* CRT button container on frame */
@@ -158,20 +160,29 @@ body{
 }
 
 .crt-help-button{
-  background-color: greenyellow;
-  color: green;
-  padding: 5px 10px;
-  font-family: "Workbench", sans-serif;
-  font-size: 24px;
+  background-color: var(--crt-text__color);
+  font-family: var(--crt-font-family);
+  letter-spacing: var(--crt-letter-spacing);
+  font-size: var(--crt-font-size);
+  color: var(--crt-text-selected__color);
   display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+  padding: 0;
   position: absolute;
   top: 10px;
   right: 10px;
   cursor: help;
-  mix-blend-mode: color-dodge;
   z-index: 2;
   border: none;
-  border-radius: 0;
+  border-radius: 0px;
+  outline: none;
+}
+
+.crt-help-button:focus{
+  outline: none;
 }
 
 .crt-help-button:hover{
@@ -187,6 +198,7 @@ body{
   justify-content: center;
   align-items: center;
   background: linear-gradient(to bottom, white 0%, grey 100%);
+  box-shadow: 0px 4px 2px grey;
 }
 
 .crt-radial-button{
@@ -201,26 +213,41 @@ body{
   font-family: "Allerta Stencil", sans-serif;
   text-transform: uppercase;
   font-weight: bold;
-  font-size: 30px;
+  font-size: 25px;
   color: black;
+  margin: 0;
 }
 
 @media (max-width: 500px) {
   .crt-frame{
-    padding: 0;
-    background: none;
+    padding: 5px;
   }
   .crt-frame::after{
-    display: none;
+    top: 5px;
+    left: 5px;
+    width: calc(100% - 10px);
+    height: calc(100% - 100px);
+    border-radius: 15px;
   }
   .crt-screen{
-    border-radius: 0;
+    top: 10px;
+    left: 10px;
+    width: calc(100% - 20px);
+    height: calc(100% - 110px);
+    position: absolute;
+    border-radius: 10px;
   }
   .crt-text, .crt-input{
-    margin: 5px;
+    font-size: var(--crt-font-size-small);
+  }
+  .crt-help-button{
+    top: 5px;
+    right: 5px;
+    width: 30px;
+    height: 30px;
+  
   }
 }
-
 
 /* CRT Scan Animation */
 @keyframes scan-line{

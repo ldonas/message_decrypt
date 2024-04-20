@@ -222,14 +222,16 @@ function getPhrase() {
 
 function checkPhrase($userKey) {
     global $phrases, $phraseIndex;
+    $userArray = explode(" ", $userKey);
     $phrase = $phrases[$phraseIndex];
-    $message = $phrase[1];
-    $cypherKey = str_replace(" ", "", $phrase[3]);
+    $messageArray = str_split($phrase[1]);
+    $cypherKey = explode(" ", $phrase[3]);
     $solved = false;
-    for ($i=0; $i < strlen($message); $i++) { 
-        $char = strpos(" " . $cypherKey, $message[$i]);
-        $message[$i] = ($char) ? $userKey[$char-1] : $message[$i];
+    for ($i=0; $i < count($messageArray); $i++) {
+        $index = array_search($messageArray[$i], array_merge([" "], $cypherKey));
+        $messageArray[$i] = ($index) ? $userArray[$index-1] : $messageArray[$i];
     }
+    $message = implode("", $messageArray);
     if($message === $phrase[0]){
         $solved = true;
     }

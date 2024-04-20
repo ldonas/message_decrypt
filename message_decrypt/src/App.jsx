@@ -9,9 +9,9 @@ function App() {
   const [brightness, setBrightness] = useState(100);
   const [contrast, setContrast] = useState(100);
   const [showInput, setShowInput] = useState(false);
-  const [initialDecryptKey, setInitialDecryptKey] = useState([[],[]]);
+  const [initialDecryptKey, setInitialDecryptKey] = useState([['U','R','J','N','G','B','D','Q','O','E','S','L','W','Y'],['Y','L','I','M']]);
   const [decryptKey, setDecryptKey] = useState(initialDecryptKey);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('O LSJYG NOBDSQO, BJWE RY OUSBO');
   const [tries, setTries] = useState(0);
   const [decryptMessage, setDecryptMessage] = useState("");
   const [solved, setSolved] = useState(false);
@@ -28,7 +28,7 @@ function App() {
 
   useEffect(() => {
     const action = {action: "getPhrase"};
-    fetch("/decrypt/phrases_interface.php", {
+    fetch("phrases_interface.php", {
       method: "POST",
       body: JSON.stringify(action),
       headers: {
@@ -53,8 +53,8 @@ function App() {
 
   useEffect(() => {
     if(decryptKey[0].length > 0 && decryptKey[0].length == decryptKey[1].length){
-      const post = {action: "checkPhrase", userKey: decryptKey[1].join("")};
-      fetch("/decrypt/phrases_interface.php", {
+      const post = {action: "checkPhrase", userKey: decryptKey[1].join(" ")};
+      fetch("phrases_interface.php", {
         method: "POST",
         body: JSON.stringify(post),
         headers: {
@@ -93,34 +93,42 @@ function App() {
         {
           (!help && message != "") ? (
           <div className="crt-screen-container">
-            {
-              showInput &&
-              <button className="crt-help-button" onClick={handleHelp}>?</button>
-            }
-            <CRTText initialText={["Mensaje entrante...", message, "Introduzca clave de descifrado:", decryptKey[0].join(" ")]} setShowInput={setShowInput}/>
+            <button className="crt-help-button" onClick={handleHelp}>?</button>
+            <CRTText key={1} initialText={["Mensaje entrante...", message, "Introduzca clave de descifrado:", decryptKey[0].join(" ")]} setShowInput={setShowInput}/>
             {
               showInput && 
+              <>
               <CRTInputDecrypt decryptKey={decryptKey} setDecryptKey={setDecryptKey}/>
+              <CRTText key={2} initialText={(solved) ? [`Fallos: ${tries}`, `Desencriptado: ${decryptMessage}`, messageDescription] : [(tries > 0) ? `Intentos: ${tries}` : "", decryptMessage]} />
+              </>
             }
-            <CRTText initialText={(solved) ? [`Fallos: ${tries}`, `Desencriptado: ${decryptMessage}`, messageDescription] : [(tries > 0) ? `Intentos: ${tries}` : "", decryptMessage]} />
           </div>
           )
           :
           <div className="crt-screen-container">
-            {
-              showInput &&
-              <button className="crt-help-button" onClick={handleHelp}>X</button>
-            }
-            <CRTText initialText={helpDescription} setShowInput={setShowInput}/>
+            <button className="crt-help-button" onClick={handleHelp}>X</button>
+            <CRTText key={3} initialText={helpDescription} setShowInput={setShowInput}/>
           </div>
         }
       </section>
       {
-        (windowWidth > 768) &&
         <section className="crt-controls">
           <CRTControl min={0} max={360} isCyclic={true} setValue={setHUE}>HUE</CRTControl>
-          <CRTControl min={0} max={200} defValue={170} isCyclic={false} setValue={setBrightness}>Brillo</CRTControl>
-          <CRTControl min={0} max={200} defValue={100} isCyclic={false} setValue={setContrast}>Contraste</CRTControl>
+          {
+            (windowWidth > 768) && 
+            <>
+              <CRTControl min={0} max={200} defValue={brightness} isCyclic={false} setValue={setBrightness}>Brillo</CRTControl>
+              <CRTControl min={0} max={200} defValue={contrast} isCyclic={false} setValue={setContrast}>Contraste</CRTControl>
+            </>
+          }
+          <div className="RRSS" style={{display: "flex", justifyContent: "flex-end", alignItems: "center"}}>
+            <a href="https://twitter.com/lorenzo_donas">
+              <img src="post-it-X.svg" width={50} height={50} alt="Imagen X" className=""/>
+            </a>
+            <a href="https://github.com/ldonas">
+              <img src="post-it-github.svg" width={50} height={50} alt="Imagen Github" className=""/>
+            </a>
+          </div>
         </section>
       }
     </main>
