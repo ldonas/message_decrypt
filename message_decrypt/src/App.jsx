@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { CRTControl } from './components/CRTControl';
+import { CRTControlPanel } from './components/CRTControlPanel';
 import { CRTText } from './components/CRTText';
 import { CRTInputDecrypt } from './components/CRTInput';
 import './App.css';
@@ -16,7 +16,6 @@ function App() {
   const [decryptMessage, setDecryptMessage] = useState("");
   const [solved, setSolved] = useState(false);
   const [help, setHelp] = useState(false);
-  const windowWidth = window.innerWidth;
   const [messageDescription, setMessageDescription] = useState(" ");
   const helpDescription = ["Autor: Lorenzo Doñas Rodríguez", 
                             "Ayuda v1.0", 
@@ -46,8 +45,8 @@ function App() {
         setDecryptKey([normalizedData[1], normalizedData[2]]);
       });
     })
-    .catch(error => {
-      console.error('Error en la solicitud:', error);
+    .catch(() => {
+      console.error('Error en la solicitud');
     });
   },[]);
 
@@ -76,8 +75,8 @@ function App() {
           }
         });
       })
-      .catch(error => {
-        console.error('Error en la solicitud:', error);
+      .catch(() => {
+        console.error('Error en la solicitud');
       });
     }
   }, [decryptKey]);
@@ -94,12 +93,12 @@ function App() {
           (!help && message != "") ? (
           <div className="crt-screen-container">
             <button className="crt-help-button" onClick={handleHelp}>?</button>
-            <CRTText key={1} initialText={["Mensaje entrante...", message, "Introduzca clave de descifrado:", decryptKey[0].join(" ")]} setShowInput={setShowInput}/>
+            <CRTText key="MESSAGE" initialText={["Mensaje entrante...", message, "Introduzca clave de descifrado:", decryptKey[0].join(" ")]} setShowInput={setShowInput}/>
             {
               showInput && 
               <>
               <CRTInputDecrypt decryptKey={decryptKey} setDecryptKey={setDecryptKey}/>
-              <CRTText key={2} initialText={(solved) ? [`Fallos: ${tries}`, `Desencriptado: ${decryptMessage}`, messageDescription] : [(tries > 0) ? `Intentos: ${tries}` : "", decryptMessage]} />
+              <CRTText key="TRIES" initialText={(solved) ? [`Fallos: ${tries}`, `Desencriptado: ${decryptMessage}`, messageDescription] : [(tries > 0) ? `Intentos: ${tries}` : "", decryptMessage]} />
               </>
             }
           </div>
@@ -107,30 +106,11 @@ function App() {
           :
           <div className="crt-screen-container">
             <button className="crt-help-button" onClick={handleHelp}>X</button>
-            <CRTText key={3} initialText={helpDescription} setShowInput={setShowInput}/>
+            <CRTText key="HELP" initialText={helpDescription} setShowInput={setShowInput}/>
           </div>
         }
       </section>
-      {
-        <section className="crt-controls">
-          <CRTControl min={0} max={360} isCyclic={true} setValue={setHUE}>HUE</CRTControl>
-          {
-            (windowWidth > 768) && 
-            <>
-              <CRTControl min={0} max={200} defValue={brightness} isCyclic={false} setValue={setBrightness}>Brillo</CRTControl>
-              <CRTControl min={0} max={200} defValue={contrast} isCyclic={false} setValue={setContrast}>Contraste</CRTControl>
-            </>
-          }
-          <div className="RRSS" style={{display: "flex", justifyContent: "flex-end", alignItems: "center"}}>
-            <a href="https://twitter.com/lorenzo_donas">
-              <img src="icons/post-it-X.svg" width={50} height={50} alt="Imagen X" className=""/>
-            </a>
-            <a href="https://github.com/ldonas">
-              <img src="icons/post-it-github.svg" width={50} height={50} alt="Imagen Github" className=""/>
-            </a>
-          </div>
-        </section>
-      }
+      <CRTControlPanel hue={hue} setHUE={setHUE} brightness={brightness} setBrightness={setBrightness} contrast={contrast} setContrast={setContrast} />
     </main>
   )
 }

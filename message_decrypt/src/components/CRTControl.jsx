@@ -43,9 +43,12 @@ export function CRTControl ({children, min, max, defValue=0, isCyclic, setValue}
                     alt="Botón radial" 
                     style={{transform: `rotate(${angle}deg)`}}
                     onMouseDown={BeginRotation} 
+                    onPointerDown={BeginRotation}
                     onMouseMove={SetRotation} 
+                    onPointerMove={SetRotation}
                     onMouseUp={EndRotation}
-                    onMouseLeave={EndRotation} 
+                    onMouseLeave={EndRotation}
+                    onPointerUp={EndRotation}
                     draggable="false"
                     className="crt-radial-button"
                 />

@@ -54,7 +54,7 @@ export function CRTInputDecrypt({decryptKey, setDecryptKey}){
         setInputText(newInputText);
     }
 
-    return (<input type="text" className="crt-input" value={inputText} onInput={handleChange} onKeyDown={handleEnter} onFocus={handleFocus} onBlur={handleBlur} style={{width:`calc(${inputText.length}ch + ${inputText.length}px)`}} autoFocus autoComplete="false"/>);
+    return (<input type="text" className="crt-input" value={inputText} onInput={handleChange} onKeyDown={handleEnter} onFocus={handleFocus} onBlur={handleBlur} autoFocus autoComplete="false"/>);
 }
 CRTInputDecrypt.propTypes = {
     decryptKey: PropTypes.array.isRequired,
