@@ -11,6 +11,12 @@ export function CRTText ({initialText, setShowInput = false}){
     // Inicializamos el estado del componente
     const [printedText, setPrintedText] = useState(Array(initialText.length).fill(''))
     const arrayText = [...initialText]
+
+    // Reseteamos el texto a imprimir cuando cambia el texto inicial
+    useEffect(() => {
+        if(printedText.toString() != initialText.toString())
+            setPrintedText(Array(arrayText.length).fill(''))
+    }, [initialText])
     
     // Función para imprimir el texto en pantalla caracter a caracter
     useEffect(() => {
