@@ -10,6 +10,11 @@ El proyecto "message_decrypt" es un juego web en el que los usuarios deben intro
 4. Si la clave es correcta, se revelará el mensaje secreto.
 5. Si la clave es incorrecta, se mostrará un mensaje de error y podrás intentarlo nuevamente.
 
+## Añadir nuevas frases
+
+Para añadir nuevas frases puedes usar el script "encode_phrase.js" solo tienes que ejecutarlo pasándole una o varias frases separadas por ';'.
+Luego copia y pega el resultado en el archivo "phrases_funcions.php" en la variable "$phrases".
+
 ## Tecnologías utilizadas
 
 El proyecto "message_decrypt" utiliza las siguientes tecnologías:
