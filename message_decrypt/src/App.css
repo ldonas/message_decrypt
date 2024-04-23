@@ -22,19 +22,8 @@
   --crt-terminal-frame__font-color: #000;
 }
 
-*, *::before, *::after{
-  box-sizing: border-box;
-}
-
-body{
-  background-color: #222;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-}
-
 /* CRT Frame: Este es el marco del monitor que aparece. Contiene tanto la pantalla verde como el panel de controles inferior */
-.crt-frame{
+.crt__frame{
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
@@ -47,7 +36,7 @@ body{
 }
 
 /* Este es el marco de color negro que divide la pantalla verde del marco del monitor */
-.crt-frame::after{
+.crt__frame::after{
   content: "";
   display: flex;
   margin: 0;
@@ -61,7 +50,7 @@ body{
 }
 
 /* CRT Screen: Aquí está la luz de fondo de la pantalla y las líneas horizontales */
-.crt-screen{
+.crt__screen{
   width: 100%;
   height: 100%;
   background: repeating-linear-gradient(to bottom, transparent, transparent var(--crt-linear__height), var(--crt-linear__color) var(--crt-linear__height) , var(--crt-linear__color) calc(var(--crt-linear__height) * 2)),
@@ -76,7 +65,7 @@ body{
 }
 
 /* CRT Scan: Esta es la banda de escaneo que aparece barriendo la pantalla */
-.crt-screen::after{
+.crt__screen::after{
   content: "";
   background: linear-gradient(to bottom, transparent, transparent 80%, var(--crt-scan__color) 100%);
   width: 100%;
@@ -90,18 +79,18 @@ body{
 }
 
 /* Contenedor de texto para mostrar una barra de scroll en caso de ser necesario */
-.crt-screen-container{
+.crt__screen__container{
   overflow: auto;
   width: 100%;
   height: 100%;
 }
 
 /* Estos son los estilos de la barra de scroll */
-.crt-screen-container::-webkit-scrollbar{
+.crt__screen__container::-webkit-scrollbar{
   background-color: transparent;
 }
 
-.crt-screen-container::-webkit-scrollbar-track{
+.crt__screen__container::-webkit-scrollbar-track{
   margin-top: 45px;
 }
 .crt-screen-container::-webkit-scrollbar-thumb{
@@ -110,20 +99,20 @@ body{
 }
 
 /* CRT Text: Aquí están los estilos de texto en la pantalla verde */
-.crt-text{
+.crt__screen__text{
   font-family: var(--crt-font-family);
   font-size: var(--crt-font-size);
   line-height: var(--crt-line-height);
   margin: 5px 0;
 }
 
-.crt-text::selection, .crt-input::selection{
+.crt__screen__text::selection, .crt__screen__input::selection{
   background-color: var(--crt-text__color);
   color: var(--crt-text-selected__color);
 }
 
 /* CRT Input: Estos son los estilos para los inputs de texto en pantalla */
-.crt-input{
+.crt__screen__input{
   font-family: var(--crt-font-family);
   font-size: var(--crt-font-size);
   line-height: var(--crt-line-height);
@@ -137,12 +126,12 @@ body{
 }
 
 /* Esto elimina el borde exterior que aparece al poner el foco en el input */
-.crt-input:focus{
+.crt__screen__input:focus{
   outline: none;
 }
 
 /* Estilos para el botón que aparece en pantalla para mostrar la ayuda */
-.crt-help-button{
+.crt__screen__help-button{
   background-color: var(--crt-text__color);
   font-family: var(--crt-font-family);
   font-size: var(--crt-font-size);
@@ -163,16 +152,16 @@ body{
   outline: none;
 }
 
-.crt-help-button:focus{
+.crt__screen__help-button:focus{
   outline: none;
 }
 
-.crt-help-button:hover{
+.crt__screen__help-button:hover{
   border: none;
 }
 
 /* CRT Control Panel: Estilos para la placa que contiene los controles en el marco de la pantalla */
-.crt-controls{
+.crt__frame__panel{
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -189,7 +178,7 @@ body{
 }
 
 /* CRT Control Container: Este es el contenedor de los controles que hay en el marco de la pantalla */
-.crt-control{
+.crt__frame__panel__control{
   display: flex;
   align-items: center;
   height: 100%;
@@ -198,7 +187,7 @@ body{
 }
 
 /* CRT Radial Button: Estilos para la rueda que controla el brillo, contraste y el HUE */
-.crt-radial-button__3d{
+.crt__frame__panel__radial-button__background{
   display: flex;
   height: 60px;
   width: 60px;
@@ -210,7 +199,7 @@ body{
 }
 
 /* Estilos para la imagen que hace de botón radial */
-.crt-radial-button{
+.crt__frame__panel__radial-button__img{
   height: 50px;
   width: 50px;
   border-radius: 50%;
@@ -218,7 +207,7 @@ body{
 }
 
 /* Estilos para las letras que aparecen en el marco de la pantalla */
-.crt-button-text{
+.crt__frame__panel__control__text{
   font-family: var(--crt-terminal-frame__font);
   font-size: var(--crt-terminal-frame__font-size);
   color: var(--crt-terminal-frame__font-color);
@@ -227,7 +216,7 @@ body{
   margin: 0;
 }
  /* Estilos para las pegatinas de redes sociales */
-.RRSS{
+.crt__frame__panel__rrss{
   display: flex;
   column-gap: 10px;
   align-items: center;
@@ -235,17 +224,17 @@ body{
 
 
 @media (max-width: 500px) {
-  .crt-frame{
+  .crt__frame{
     padding: 5px;
   }
-  .crt-frame::after{
+  .crt__frame::after{
     top: 5px;
     left: 5px;
     width: calc(100% - 10px);
     height: calc(100% - 100px);
     border-radius: 15px;
   }
-  .crt-screen{
+  .crt__screen{
     top: 10px;
     left: 10px;
     width: calc(100% - 20px);
@@ -253,10 +242,10 @@ body{
     position: absolute;
     border-radius: 10px;
   }
-  .crt-text, .crt-input{
+  .crt__screen__text, .crt__screen__input{
     font-size: var(--crt-font-size-small);
   }
-  .crt-help-button{
+  .crt__screen__help-button{
     top: 5px;
     right: 5px;
     width: 30px;

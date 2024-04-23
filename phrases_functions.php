@@ -204,13 +204,17 @@ $phrases = [
 
 ];
 
+// Obtenemos el total de frases
 $totalPhrases = count($phrases);
 
-//Usamos la suma de año y dia del año como semilla de números aleatorios y generamos uno
-srand(date("Y") + date("z"));
-$phraseIndex = rand(0, $totalPhrases-1);
+//Usamos la suma de año y dia del año para obtener un indice de frase
+$phraseIndex = (date('Y') + date('z')) % $totalPhrases;
 
-function getPhrase() {
+/**
+ * Obtiene la frase encriptada, la clave de cifrado y la pista
+ * @return array<string> [Frase encriptada, Clave de cifrado, Pista]
+ */
+function get_phrase() : array {
     global $phrases, $phraseIndex;
     $phrase = $phrases[$phraseIndex];
     return [
@@ -220,21 +224,29 @@ function getPhrase() {
     ];
 }
 
-function checkPhrase($userKey) {
+/**
+ * Compara la clave introducida por el usuario con la clave correcta e intenta desencriptar la frase.
+ * @param string $userKey Clave introducida por el usuario
+ * @return array<string> [Resultado de la comparación, Frase desencriptada, Información adicional]
+ */
+function check_phrase(string $userKey) : array{
     global $phrases, $phraseIndex;
-    $userArray = explode(" ", $userKey);
     $phrase = $phrases[$phraseIndex];
-    $messageArray = str_split($phrase[1]);
+    // Comparamos las claves
+    $solved = $userKey === $phrase[2];
+    
+    
+    // Convertimos la frase en un array de caracteres con mb_str_split para evitar problemas con caracteres especiales
+    $messageArray = mb_str_split($phrase[1]);
+    $userArray = explode(" ", $userKey);
     $cypherKey = explode(" ", $phrase[3]);
-    $solved = false;
     for ($i=0; $i < count($messageArray); $i++) {
         $index = array_search($messageArray[$i], array_merge([" "], $cypherKey));
         $messageArray[$i] = ($index) ? $userArray[$index-1] : $messageArray[$i];
     }
     $message = implode("", $messageArray);
-    if($message === $phrase[0]){
-        $solved = true;
-    }
+
+    // Devolvemos el resultado
     return ($solved) ? [$solved, $message, $phrase[5]] : [$solved, $message];
 }
 

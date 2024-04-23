@@ -2,10 +2,11 @@
 const letters = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","Ñ","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
 
 function encodePhrase(phrase){
-    const UpperPhrase = phrase.toUpperCase();
-    const codeKey = generateCodeKey(phrase);
+    const normalizedPhrase = phrase.replaceAll("á","a").replaceAll("é","e").replaceAll("í","i").replaceAll("ó","o").replaceAll("ú","u");
+    const UpperPhrase = normalizedPhrase.toUpperCase();
+    const codeKey = generateCodeKey(normalizedPhrase);
     const cypherKey = generateCypherKey(codeKey);
-    const phraseArray = phrase.split("");
+    const phraseArray = normalizedPhrase.split("");
     let encodedPhrase = "";
     for(let i = 0; i < phraseArray.length; i++){
         if(letters.includes(phraseArray[i].toUpperCase())){
@@ -23,7 +24,7 @@ function encodePhrase(phrase){
         hint.push(codeKey[i]);
     }
 
-    return [UpperPhrase, encodedPhrase, codeKey.join(" "), cypherKey.join(" "), hint.join(" ")];
+    return [UpperPhrase, encodedPhrase, codeKey.join(" "), cypherKey.join(" "), hint.join(" "), "Significado"];
 }
 
 function generateCodeKey(phrase){
@@ -45,8 +46,11 @@ function generateCypherKey(originalKey){
     const cypherKey = [];
     while(cypherKey.length < originalKey.length){
         const index = Math.floor(Math.random() * lettersPool.length);
-        cypherKey.push(lettersPool[index]);
-        lettersPool.splice(index, 1);
+        if(originalKey[cypherKey.length - 1] != lettersPool[index])
+        {
+            cypherKey.push(lettersPool[index]);
+            lettersPool.splice(index, 1);
+        }
     }
 
     return cypherKey;
@@ -62,5 +66,17 @@ function shuffle(arrayData){
 
     return shuffledArray;
 }
+
+function encondeMultiplePhrases(phrases){
+    const result = [];
+    const shuffledPhrases = shuffle(phrases);
+    const length = shuffledPhrases.length;
+    for(let i = 0; i < length; i++){
+        result.push(encodePhrase(shuffledPhrases[i]));
+    }
+
+    return result;
+}
 const input = process.argv[2];
-console.log(encodePhrase(input));
+const phrases = input.split(";");
+console.log(encondeMultiplePhrases(phrases));
