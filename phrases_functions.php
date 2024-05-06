@@ -1,45 +1,71 @@
 <?php
 
-$phrases = [
-    [ //1
-        'A QUIEN MADRUGA, DIOS LE AYUDA', //Frase correcta
-        'O LSJYG NOBDSQO, BJWE RY OUSBO', //Frase cifrada
-        'Y L I M N D R G A S U Q O E', //Letras de la frase desordenadas
-        'U R J N G B D Q O E S L W Y', //Letras cifradas
-        'Y L I M', //Pista
-        'Refrán español que recomienda ser diligente para tener éxito en las pretensiones laborales.' //Descripción o información sobre la frase
-    ],
-    [ //2
-        'MAS VALE ESTAR SOLO QUE MAL ACOMPAÑADO',
-        'UTX FTKY YXITV XCKC ANY UTK TJCULTMTPC',
-        'V M U Ñ T O Q D R C L A P E S',
-        'F U N M I C A P V J K T L Y X',
-        'V M U',
-        'Refrán español que recomienda ser selectivo en la elección de compañías.'
-    ],
-    [ //3
-        'PERRO LADRADOR POCO MORDEDOR',
-        'LBIIG OXEIXEGI LGNG SGIEBEGI',
-        'D A C R O L P E M',
-        'E X N I G O L B S',
-        'D A C',
-        'Refrán español que recomienda no temer a las personas que hablan mucho.'
-    ]
-];
+// Generamos la semilla para el día actual
+$seed = date('z') + date('Y');
+$file_name = '../phrases/today_phrase.php';
+$phrase = "";
 
-// Obtenemos el total de frases
-$totalPhrases = count($phrases);
-
-//Usamos la suma de año y dia del año para obtener un indice de frase
-$phraseIndex = (date('Y') + date('z')) % $totalPhrases;
+// Si existe el archivo de la frase del día, la leemos
+if(file_exists($file_name)){
+    $phrase = read_phrase_file();
+}
+// Si no existe, la escribimos
+else{
+    $writed = write_phrase_file($phrase);
+    $phrase = ($writed[0]) ? $writed[1] : read_phrase_file();
+}
 
 /**
- * Obtiene la frase encriptada, la clave de cifrado y la pista
- * @return array<string> [Frase encriptada, Clave de cifrado, Pista]
+ * Función para escribir la frase del día en el archivo
+ * @return bool|array Fallo en la escritura | Frase del día
  */
-function get_phrase() : array {
-    global $phrases, $phraseIndex;
-    $phrase = $phrases[$phraseIndex];
+function write_phrase_file() : bool | array{
+    global $file_name, $seed;
+    require_once '../phrases/phrases.php';
+    $totalPhrases = count($phrases);
+    $phraseIndex = $seed % $totalPhrases;
+    $today_phrase = $phrases[$phraseIndex];
+    $write = false;
+    $file = fopen($file_name, 'w');
+    // Si se puede bloquear el archivo, escribimos la frase del día
+    if(flock($file, LOCK_EX | LOCK_NB)){
+        fwrite($file, '<?php $today_seed = '.var_export($seed, true).'; $today_phrase = '.var_export($today_phrase, true).'; ?>');
+        $write = [true, $today_phrase];
+        flock($file, LOCK_UN);
+    }
+
+    return $write;
+}
+
+/**
+ * Función para leer la frase del día del archivo
+ * @return array [Frase del día, Frase cifrada, Letras desordenadas, Letras cifradas, Pista, Descripción]
+ */
+function read_phrase_file() : array{
+    global $file_name, $seed;
+    $readed_phrase = "";
+    $file = fopen($file_name, 'r');
+    // Si se puede bloquear el archivo, leemos la frase del día
+    if(flock($file, LOCK_SH)){
+        require_once $file_name;
+        if($seed === $today_seed){
+            $readed_phrase = $today_phrase;
+        }
+        else{
+            $writed = write_phrase_file();
+            $readed_phrase = ($writed[0]) ? $writed[1] : read_phrase_file();
+        }
+        flock($file, LOCK_UN);
+    }
+    return $readed_phrase;
+}
+
+/**
+ * Función para obtener la frase del día
+ * @return array [Frase del día, Letras desordenadas, Letras cifradas]
+ */
+function get_phrase() {
+    global $phrase;
     return [
         $phrase[1],
         $phrase[3],
@@ -48,28 +74,27 @@ function get_phrase() : array {
 }
 
 /**
- * Compara la clave introducida por el usuario con la clave correcta e intenta desencriptar la frase.
+ * Función para comprobar si la frase introducida por el usuario es correcta
  * @param string $userKey Clave introducida por el usuario
- * @return array<string> [Resultado de la comparación, Frase desencriptada, Información adicional]
+ * @return array [La clave es correcta, Mensaje, Descripción] | [La clave no es correcta, Mensaje]
  */
-function check_phrase(string $userKey) : array{
-    global $phrases, $phraseIndex;
-    $phrase = $phrases[$phraseIndex];
-    // Comparamos las claves
-    $solved = $userKey === $phrase[2];
-    
-    
-    // Convertimos la frase en un array de caracteres con mb_str_split para evitar problemas con caracteres especiales
-    $messageArray = mb_str_split($phrase[1]);
+function check_phrase($userKey) : array {
+    global $phrase;
     $userArray = explode(" ", $userKey);
+    // Convertimos la frase en un array de caracteres con mb_str_split para soportar caracteres especiales
+    $messageArray = mb_str_split($phrase[1]);
     $cypherKey = explode(" ", $phrase[3]);
+    $solved = false;
+    // Recorremos el array de la frase y comparamos con el array de la clave
     for ($i=0; $i < count($messageArray); $i++) {
         $index = array_search($messageArray[$i], array_merge([" "], $cypherKey));
         $messageArray[$i] = ($index) ? $userArray[$index-1] : $messageArray[$i];
     }
     $message = implode("", $messageArray);
-
-    // Devolvemos el resultado
+    if($userKey === $phrase[2]){
+        $solved = true;
+    }
+    // Si la clave introducida es correcta devolvemos la descripción de la frase
     return ($solved) ? [$solved, $message, $phrase[5]] : [$solved, $message];
 }
 

@@ -23,7 +23,7 @@ function App() {
   const helpDescription = [ 'Autor: Lorenzo Doñas Rodríguez', 
                             'Ayuda v1.0', 
                             '1. Introduzca la frase de desencriptado haciendo coincidir las letras encriptadas con las que usted piensa.',
-                            '2. Una vez introducidas todas los caracteres, pulse Enter.',
+                            '2. Una vez introducidos todos los caracteres, pulse Enter.',
                             '3. Se mostrará un conteo de intentos y el intento de desencriptado con la clave introducida.',
                             '4. Si la clave es correcta se mostrará la cantidad de fallos cometidos y una breve descripción de la frase.',
                             '5. Recuerda que la frase puede contener \'Ñ\', pero no vocales con tilde.',
