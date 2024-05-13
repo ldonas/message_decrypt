@@ -222,7 +222,7 @@
 }
 
 
-@media (max-width: 500px) {
+@media (max-width: 500px), (max-height: 500px) {
   .crt__frame{
     padding: 5px;
   }
